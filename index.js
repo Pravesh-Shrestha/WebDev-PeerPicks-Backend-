@@ -1,36 +1,39 @@
 //Initializations
 const express = require("express");
-const cors= require("cors");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const sequelize = require("./database/db");
 const testRoute = require("./routes/testRoute");
 
 //creating a server
-const app=express();
+const app = express();
 
 //creating a port
-const PORT=5000;
+const PORT = 5000;
 
 //creating a middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
+// Routes
+app.use('/test', testRoute);
 
-//creating a route
-app.get('/',(req, res)=>{
-    res.send("This is web page")
-})
-app.get('/ourpartners',(req, res)=>{
-    res.send(`Your Partners`)
-})
+// Database sync and server startup
+sequelize.sync()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
-app.use('/test',testRoute);
-app.get('/test',testRoute);
-
-//running on port
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 app.get('/test',(req, res)=>{

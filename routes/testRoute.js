@@ -1,17 +1,22 @@
-//importing model
-const Test = require("../model/test");
+const express = require('express');
+const router = express.Router();
 
-//creating a route
-const getTest = async (req, res) => {
-    try {
-        const tests = await Test.find();
-        res.status(200).json(tests);
-        console.log('Retreive all test users');
-      } 
-      catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve test data' });
-      }
-    
-    };
-    
-module.exports = { getTest };
+// Define your routes
+router.get('/', (req, res) => {
+    res.send('Get all users');
+});
+
+router.post('/', (req, res) => {
+    res.send('Create user');
+});
+
+router.put('/:id', (req, res) => {
+    res.send(`Update user ${req.params.id}`);
+});
+
+router.delete('/:id', (req, res) => {
+    res.send(`Delete user ${req.params.id}`);
+});
+
+// Make sure to export the router
+module.exports = router;
