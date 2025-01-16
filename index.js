@@ -2,8 +2,8 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const sequelize = require("./database/db");
-const testRoute = require("./routes/testRoute");
+const sequelize = require("./database/user_db");
+const testRoute = require("./routes/userRoute");
 
 //creating a server
 const app = express();

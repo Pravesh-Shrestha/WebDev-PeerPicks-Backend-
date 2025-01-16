@@ -1,5 +1,5 @@
 // importing model
-const Test = require("../model/test");
+const Test = require("../model/userModel");
 
 //create functions to get all test users
 const getTest = async (req, res) => {
