@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const sequelize = require("./database/user_db");
-const testRoute = require("./routes/userRoute");
+const userRoute = require("./routes/userRoute");
 
 //creating a server
 const app = express();
@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-app.use('/test', testRoute);
+app.use('/user', userRoute);
 
 // Database sync and server startup
 sequelize.sync()
