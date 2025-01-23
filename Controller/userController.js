@@ -1,71 +1,55 @@
-// importing model
-const Test = require("../model/userModel");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Users = require('../models/userModel');
 
-//create functions to get all test users
-const getTest = async (req, res) => {
+const UserController = {
+  register: async (req, res) => {
+    const { username, email, password } = req.body;
+
     try {
-        const tests = await Test.findAll();
-        res.status(200).json(tests);
-        console.log('Retreive all test users');
-      } 
-      catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve test data' });
-      }
-    };
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = await Users.create({ username, email, password: hashedPassword });
+      res.status(201).json({ id: newUser.id, username: newUser.username });
+    } catch (error) {
+      res.status(500).json({ error: 'Registration failed.' });
+    }
+  },
 
-//creating a function to create test users
-const createTest = async (req, res) => {
+  login: async (req, res) => {
+    const { username, password } = req.body;
+
     try {
-        const { username, password } = req.body;
-        const test = await Test.create(req.body);
-        res.status(200).json(test);
-        console.log('Test user created successfully');
-      } 
-      catch (error) {
-        res.status(500).json({ error: 'Failed to create test user' });
-      }
-    };
-  
-// Function to update test user by ID
-const updateTest = async (req, res) => {
-  try {
-      const { id } = req.params; // Extract the ID from the route parameters
-      const { username, password } = req.body; // Extract the updated fields from the request body
-
-      // Find the test user by ID
-      const test = await Test.findByPk(id);
-      if (!test) {
-          return res.status(404).json({ error: 'Test user not found' });
+      const user = await Users.findOne({ where: { username } });
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid credentials.' });
       }
 
-      // Update the test user with new values
-      await test.update({ username, password });
-      res.status(200).json(test);
-      console.log(`Test user with ID ${id} updated successfully`);
-  } catch (error) {
-      res.status(500).json({ error: 'Failed to update test user' });
-  }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(400).json({ error: 'Invalid credentials.' });
+      }
+
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      res.json({ token });
+    } catch (error) {
+      res.status(500).json({ error: 'Login failed.' });
+    }
+  },
+
+  getProfile: async (req, res) => {
+    const userId = req.user.id; // Extracted from the auth middleware
+
+    try {
+      const user = await Users.findByPk(userId, { attributes: ['id', 'username', 'email'] });
+      if (!user) {
+        return res.status(404).json({ error: 'User not found.' });
+      }
+
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch user profile.' });
+    }
+  },
 };
 
-// Function to delete test user by ID
-const deleteTest = async (req, res) => {
-  try {
-      const { id } = req.params; // Extract the ID from the route parameters
-
-      // Find the test user by ID
-      const test = await Test.findByPk(id);
-      if (!test) {
-          return res.status(404).json({ error: 'Test user not found' });
-      }
-
-      // Delete the test user
-      await test.destroy();
-      res.status(200).json({ message: `Test user with ID ${id} deleted successfully` });
-      console.log(`Test user with ID ${id} deleted successfully`);
-  } catch (error) {
-      res.status(500).json({ error: 'Failed to delete test user' });
-  }
-};
-
-
-module.exports = { getTest, createTest,updateTest,deleteTest };
+module.exports = UserController;

@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const sequelize = require("./database/user_db");
-const userRoute = require("./routes/userRoute");
+const userRoute = require("./routes/userRoutes");
 
 //creating a server
 const app = express();
@@ -36,21 +36,22 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-app.get('/test',(req, res)=>{
-    res.send(`Get all users`)
-});
 
-app.post('/test',(req, res)=>{
-    res.send(`Create user`)
-});
+// app.get('/test',(req, res)=>{
+//     res.send(`Get all users`)
+// });
 
-app.put('/user/:id',(req, res)=>{
-    res.send(`Update user ${req.params.id}`)
-});
+// app.post('/test',(req, res)=>{
+//     res.send(`Create user`)
+// });
 
-app.delete('/user/:id',(req, res)=>{
-    res.send(`Delete user ${req.params.id}`)
-});
+// app.put('/user/:id',(req, res)=>{
+//     res.send(`Update user ${req.params.id}`)
+// });
+
+// app.delete('/user/:id',(req, res)=>{
+//     res.send(`Delete user ${req.params.id}`)
+// });
 
 
 
