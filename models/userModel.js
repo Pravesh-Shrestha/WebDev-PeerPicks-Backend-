@@ -29,9 +29,9 @@ Users.sync();
 
 // In models/userModel.js after the Users model definition
 
-Users.hasMany(Friendships, { foreignKey: 'userId1' });
-Users.hasMany(Friendships, { foreignKey: 'userId2' });
-Users.hasMany(Messages, { foreignKey: 'senderId' });
-Users.hasMany(Messages, { foreignKey: 'receiverId' });
+// Users.hasMany(Friendships, { foreignKey: 'userId1' });
+// Users.hasMany(Friendships, { foreignKey: 'userId2' });
+// Users.hasMany(Messages, { foreignKey: 'senderId' });
+// Users.hasMany(Messages, { foreignKey: 'receiverId' });
 
 module.exports = Users;

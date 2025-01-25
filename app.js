@@ -1,17 +1,35 @@
-// app.js
 const express = require('express');
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
-const businessRoutes = require('./routes/businessRoutes');
-const ratingRoutes = require('./routes/ratingRoutes');
-require('dotenv').config();
+const dotenv = require('dotenv');
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/users', userRoutes);
-app.use('/api/businesses', businessRoutes);
-app.use('/api/ratings', ratingRoutes);
+// Routes
+const userRoutes = require('./routes/userRoutes');
+console.log("userRoutes:", userRoutes); 
 
-module.exports = app;
+app.use('/users', userRoutes);
+
+// Check the output
+// const businessRoutes = require('./routes/businessRoutes');
+// console.log("businessRoutes:", businessRoutes); // Check the output
+// const ratingRoutes = require('./routes/ratingRoutes');
+// console.log("ratingRoutes:", ratingRoutes); // Check the output
+
+// ... rest of your app.js
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const sequelize = require("./database/user_db");
-const userRoute = require("./routes/userRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 //creating a server
 const app = express();
@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-app.use('/user', userRoute);
+app.use('/user', userRoutes);
 
 // Database sync and server startup
 sequelize.sync()
@@ -30,11 +30,11 @@ sequelize.sync()
     console.error('Unable to connect to the database:', err);
   });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+// // Error handling middleware
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).send('Something broke!');
+// });
 
 
 // app.get('/test',(req, res)=>{
