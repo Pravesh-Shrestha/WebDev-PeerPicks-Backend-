@@ -1,16 +1,28 @@
-// controllers/ratingController.js
 const Rating = require('../models/ratingModel');
 
-const RatingController = {
-  create: async (req, res) => {
-    const { userId, businessId, rating, review } = req.body;
-    try {
-      const newRating = await Rating.create(userId, businessId, rating, review);
-      res.status(201).json(newRating);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to add rating' });
-    }
-  },
+exports.createRating = async (req, res) => {
+  try {
+    const { rating, review, userId, businessId } = req.body;
+    const newRating = await Rating.create({
+      Rating: rating,
+      Review: review,
+      User_ID: userId,
+      Business_ID: businessId,
+      Timestamp: new Date(),
+    });
+    res.status(201).json(newRating);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-module.exports = RatingController;
+exports.getRatingsByBusiness = async (req, res) => {
+  try {
+    const ratings = await Rating.findAll({
+      where: { Business_ID: req.params.id },
+    });
+    res.status(200).json(ratings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
