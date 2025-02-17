@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const productRoute= require('./routes/productRoute');
 
 // Load environment variables
 dotenv.config();
@@ -16,6 +17,7 @@ const userRoutes = require('./routes/userRoutes');
 console.log("userRoutes:", userRoutes); 
 
 app.use('/users', userRoutes);
+app.use('/products',productRoute);
 
 // Check the output
 // const businessRoutes = require('./routes/businessRoutes');
