@@ -3,7 +3,7 @@ const sequelize = require("../database/user_db");
 const User = require("./userModel");
 const Business = require("./businessModel");
 
-const Rating = sequelize.define("Rating", {
+const Rating = sequelize.define("Ratings", {
     rating_id: { 
         type: DataTypes.INTEGER, 
         primaryKey: true, 
@@ -31,6 +31,10 @@ const Rating = sequelize.define("Rating", {
         type: DataTypes.INTEGER,
         allowNull: false, 
         validate: { min: 1, max: 5 } 
+    },
+    ratingImage:{
+        type: DataTypes.STRING,
+        allowNull: true
     },
     review: { 
         type: DataTypes.STRING 
