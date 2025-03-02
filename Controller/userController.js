@@ -44,7 +44,7 @@ const UserController = {
     // ✅ Ensure user.id is sent properly
     res.json({ 
       token, 
-      user_id: user.id, 
+      user_id: user.user_id, 
       username: user.username, 
       email: user.email 
     });
