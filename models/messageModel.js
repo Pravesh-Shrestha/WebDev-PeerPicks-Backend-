@@ -1,38 +1,16 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database/user_db");
-const Users = require("./userModel"); // Import the Users model
+const Rating = require("./ratingModel");
 
-const Messages = sequelize.define("Messages", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  senderId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Users,
-      key: 'id',
-    },
-    allowNull: false,
-  },
-  receiverId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Users,
-      key: 'id',
-    },
-    allowNull: false,
-  },
-  message: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
+const Message = sequelize.define("Message", {
+    message_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    message_text: { type: DataTypes.STRING, allowNull: false },
+    timestamp: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
 }, {
-  timestamps: true, // Automatically manage createdAt and updatedAt fields
+    timestamps: true
 });
 
-// Sync the model with the database
-Messages.sync();
+// Association
+Message.belongsTo(Rating, { foreignKey: "rating_rating_id", onDelete: "SET NULL" });
 
-module.exports = Messages;
+module.exports = Message;

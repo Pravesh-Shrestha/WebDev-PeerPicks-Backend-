@@ -1,25 +1,53 @@
-// controllers/businessController.js
-const Business = require('../models/businessModel');
+const { Business } = require("../models/businessModel");
 
-const BusinessController = {
-  getAll: async (req, res) => {
+exports.getBusinesses = async (req, res) => {
     try {
-      const businesses = await Business.findAll();
-      res.json(businesses);
+        const businesses = await Business.findAll();
+        res.json(businesses);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch businesses' });
+        res.status(500).json({ error: "Error fetching businesses" });
     }
-  },
-
-  create: async (req, res) => {
-    const { name, description, location } = req.body;
-    try {
-      const business = await Business.create(name, description, location);
-      res.status(201).json(business);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to add business' });
-    }
-  },
 };
 
-module.exports = BusinessController;
+exports.getBusinessById = async (req, res) => {
+    try {
+        const business = await Business.findByPk(req.params.id);
+        if (!business) return res.status(404).json({ error: "Business not found" });
+        res.json(business);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching business" });
+    }
+};
+
+exports.createBusiness = async (req, res) => {
+    try {
+        const business = await Business.create(req.body);
+        res.status(201).json(business);
+    } catch (error) {
+        res.status(500).json({ error: "Error creating business" });
+    }
+};
+
+exports.updateBusiness = async (req, res) => {
+    try {
+        const business = await Business.findByPk(req.params.id);
+        if (!business) return res.status(404).json({ error: "Business not found" });
+
+        await business.update(req.body);
+        res.json(business);
+    } catch (error) {
+        res.status(500).json({ error: "Error updating business" });
+    }
+};
+
+exports.deleteBusiness = async (req, res) => {
+    try {
+        const business = await Business.findByPk(req.params.id);
+        if (!business) return res.status(404).json({ error: "Business not found" });
+
+        await business.destroy();
+        res.json({ message: "Business deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: "Error deleting business" });
+    }
+};

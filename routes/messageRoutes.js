@@ -1,10 +1,11 @@
-const express = require('express');
-const MessageController = require('../controllers/messageController');
-const authMiddleware = require('../middlewares/authMiddleware'); // Ensure you have this middleware
+const express = require("express");
+const { getMessages, createMessage, getMessageById, deleteMessage } = require("../Controller/messageController");
 
 const router = express.Router();
 
-router.post('/send', authMiddleware, MessageController.sendMessage);
-router.get('/:userId/messages', authMiddleware, MessageController.getMessages);
+router.get("/", getMessages);
+router.post("/", createMessage);
+router.get("/:id", getMessageById);
+router.delete("/:id", deleteMessage);
 
 module.exports = router;

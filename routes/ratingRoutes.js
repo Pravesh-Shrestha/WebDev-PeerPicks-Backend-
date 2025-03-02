@@ -1,12 +1,12 @@
-const express = require('express');
-const { createRating, getRatingsByBusiness } = require('../Controller/ratingController');
+const express = require("express");
+const { getRatings, createRating, getRatingById, updateRating, deleteRating } = require("../Controller/ratingController");
 
 const router = express.Router();
 
-// Route to create a new rating
-router.post('/', createRating);
-
-// Route to get ratings for a specific business
-router.get('/business/:id', getRatingsByBusiness);
+router.get("/", getRatings);
+router.post("/", createRating);
+router.get("/:id", getRatingById);
+router.put("/:id", updateRating);
+router.delete("/:id", deleteRating);
 
 module.exports = router;
