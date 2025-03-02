@@ -28,6 +28,4 @@ const Message = sequelize.define("Message", {
 
 // Association
 Message.belongsTo(User, { foreignKey: "user_id", onDelete: "CASCADE" });
-Message.belongsTo(Rating, { foreignKey: "rating_rating_id", onDelete: "SET NULL" });
-
 module.exports = Message;

@@ -18,6 +18,15 @@ const Rating = sequelize.define("Rating", {
         },
         onDelete: "CASCADE"
     },
+    business_id:{
+        type: DataTypes.INTEGER, 
+        allowNull: false,
+        references: {
+            model: Business,
+            key: "business_id"
+        },
+        onDelete: "CASCADE"
+    },
     rating: { 
         type: DataTypes.INTEGER,
         allowNull: false, 
@@ -36,7 +45,6 @@ const Rating = sequelize.define("Rating", {
 
 // Associations
 Rating.belongsTo(User, { foreignKey: "user_id", onDelete: "CASCADE" });
-Rating.belongsTo(Business, { foreignKey: "business_business_id", onDelete: "CASCADE" });
-Rating.belongsTo(User, { foreignKey: "users_user_id2", onDelete: "CASCADE", as: "reviewedBy" });
+Rating.belongsTo(Business, { foreignKey: "business_id", onDelete: "CASCADE" });
 
 module.exports = Rating;
