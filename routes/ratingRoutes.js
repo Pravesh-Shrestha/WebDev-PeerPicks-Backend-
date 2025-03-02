@@ -1,12 +1,11 @@
 const express = require("express");
-const { getRatings, createRating, getRatingById, updateRating, deleteRating } = require("../Controller/ratingController");
-
 const router = express.Router();
+const RatingController = require("../controllers/ratingController");
 
-router.get("/", getRatings);
-router.post("/", createRating);
-router.get("/:id", getRatingById);
-router.put("/:id", updateRating);
-router.delete("/:id", deleteRating);
+router.get("/getAllRatings", RatingController.getRatings);
+router.get("/getRatingsById/:id", RatingController.getRatingById);
+router.post("/addRating", RatingController.createRating);
+router.put("/updateRating/:id", RatingController.updateRating);
+router.delete("/deleteRating/:id", RatingController.deleteRating);
 
 module.exports = router;
