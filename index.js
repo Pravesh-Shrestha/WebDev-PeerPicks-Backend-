@@ -4,9 +4,9 @@ const bodyParser = require("body-parser");
 const sequelize = require("./database/user_db");
 const userRoutes = require("./routes/userRoutes");
 // Import other routes as needed
-// const messageRoutes = require("./routes/messageRoutes");
-// const ratingRoutes = require("./routes/ratingRoutes");
-// const businessRoutes = require("./routes/businessRoutes");
+const messageRoutes = require("./routes/messageRoutes");
+const ratingRoutes = require("./routes/ratingRoutes");
+const businessRoutes = require("./routes/businessRoutes");
 
 require('dotenv').config(); // Load environment variables from .env
 
@@ -27,10 +27,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/users', userRoutes); // Updated to match frontend URL
-// Add other routes
-// app.use('/messages', messageRoutes);
-// app.use('/ratings', ratingRoutes);
-// app.use('/businesses', businessRoutes);
+app.use('/messages', messageRoutes);
+app.use('/ratings', ratingRoutes);
+app.use('/businesses', businessRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

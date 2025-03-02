@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const RatingController = require("../controllers/ratingController");
+const RatingController = require("../Controller/ratingController");
 
 router.get("/getAllRatings", RatingController.getRatings);
 router.get("/getRatingsById/:id", RatingController.getRatingById);

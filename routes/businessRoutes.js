@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const BusinessController = require("../controllers/businessController");
+const BusinessController = require("../Controller/businessController");
 
 router.get("/getAllBusiness", BusinessController.getBusinesses);
 router.get("/getBusinessById/:id", BusinessController.getBusinessById);
