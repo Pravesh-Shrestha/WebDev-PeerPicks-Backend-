@@ -1,7 +1,6 @@
 const Rating = require("../models/ratingModel"); 
-const User =require('../models/userModel')
-const Business=require('../models/businessModel')
-
+const User = require('../models/userModel');
+const Business = require('../models/businessModel');
 
 exports.getRatings = async (req, res) => {
     try {
@@ -36,7 +35,7 @@ exports.getRatingById = async (req, res) => {
 
 exports.createRating = async (req, res) => {
     try {
-        const { user_id, business_id, rating, review, ratingImage } = req.body;
+        const { user_id, business_id, rating, review, ratingImage, isSaved } = req.body;
 
         // Validate that required fields are present
         if (!user_id || !business_id || !rating) {
@@ -61,7 +60,8 @@ exports.createRating = async (req, res) => {
             business_id,
             rating,
             review,
-            ratingImage: ratingImage || null // Use null if no image is provided
+            ratingImage: ratingImage || null, // Use null if no image is provided
+            isSaved: isSaved || false // Default to false if not provided
         });
 
         res.status(201).json(ratingEntry);

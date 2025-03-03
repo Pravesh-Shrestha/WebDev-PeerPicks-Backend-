@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const sequelize = require("./database/user_db");
-const userRoutes = require("./routes/userRoutes");
+const path = require("path");
 // Import other routes as needed
+const userRoutes = require("./routes/userRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const ratingRoutes = require("./routes/ratingRoutes");
 const businessRoutes = require("./routes/businessRoutes");
@@ -22,11 +22,13 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());  // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true }));  // Parse URL-encoded bodies
 
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
-app.use('/api/users', userRoutes); // Updated to match frontend URL
+app.use('/api/users', userRoutes); 
 app.use('/messages', messageRoutes);
 app.use('/ratings', ratingRoutes);
 app.use('/businesses', businessRoutes);

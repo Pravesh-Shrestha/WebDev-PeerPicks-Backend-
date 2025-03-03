@@ -42,6 +42,10 @@ const Rating = sequelize.define("Ratings", {
     timestamp: { 
         type: DataTypes.DATE, 
         defaultValue: DataTypes.NOW 
+    },
+    isSaved:{
+        type: DataTypes.BOOLEAN,
+        defaultValue:false
     }
 }, {
     timestamps: true
