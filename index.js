@@ -28,11 +28,10 @@ app.use(express.urlencoded({ extended: true }));  // Parse URL-encoded bodies
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
-app.use('/api/users', userRoutes); 
-app.use('/messages', messageRoutes);
-app.use('/ratings', ratingRoutes);
-app.use('/businesses', businessRoutes);
-
+app.use("/api/users", userRoutes);
+app.use("/api/ratings", ratingRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/businesses", businessRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
