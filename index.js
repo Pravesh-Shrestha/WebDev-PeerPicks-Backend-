@@ -27,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));  // Parse URL-encoded bodies
 
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/ratings", ratingRoutes);

@@ -26,7 +26,7 @@ const Business = sequelize.define("Businesses", {
         allowNull: false,
         references: {
             model: User,
-            key: "user_id"
+            key: "id"
         },
         onDelete: "CASCADE"
     },

@@ -7,7 +7,7 @@ exports.getRatings = async (req, res) => {
         const ratings = await Rating.findAll({
             include: [
                 { model: User, attributes: ['user_id', 'username'] },  
-                { model: Business, attributes: ['business_id', 'business_name'] }  
+                { model: Business, attributes: ['business_id', 'name'] }  
             ]
         });
         res.json(ratings);
@@ -37,29 +37,33 @@ exports.createRating = async (req, res) => {
     try {
         const { user_id, business_id, rating, review, isSaved } = req.body;
 
+        // Validate the required fields
         if (!user_id || !business_id || !rating) {
             return res.status(400).json({ error: "User ID, Business ID, and Rating are required" });
         }
 
+        // Ensure rating is between 1 and 5
         if (rating < 1 || rating > 5) {
             return res.status(400).json({ error: "Rating must be between 1 and 5" });
         }
 
+        // Check if the user and business exist
         const user = await User.findByPk(user_id);
         const business = await Business.findByPk(business_id);
 
         if (!user) return res.status(404).json({ error: "User not found" });
         if (!business) return res.status(404).json({ error: "Business not found" });
 
-        // Handle image upload
-        const ratingImage = req.file ? req.file.filename : null;
+        // Handle the image URL
+        const ratingImage = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
 
+        // Create the new rating entry
         const ratingEntry = await Rating.create({
             user_id,
             business_id,
             rating,
             review,
-            ratingImage, 
+            ratingImage, // Save the URL to the image
             isSaved: isSaved || false
         });
 
@@ -69,6 +73,7 @@ exports.createRating = async (req, res) => {
         res.status(500).json({ error: "Error creating rating" });
     }
 };
+
 
 
 exports.updateRating = async (req, res) => {

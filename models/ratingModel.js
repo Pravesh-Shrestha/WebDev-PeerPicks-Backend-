@@ -14,7 +14,7 @@ const Rating = sequelize.define("Ratings", {
         allowNull: false,
         references: {
             model: User,
-            key: "user_id"
+            key: "id"
         },
         onDelete: "CASCADE"
     },

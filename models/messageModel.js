@@ -18,7 +18,7 @@ const Message = sequelize.define("Messages", {
         allowNull: false,
         references: {
             model: User,
-            key: "user_id"
+            key: "id"
         },
         onDelete: "CASCADE"
     },

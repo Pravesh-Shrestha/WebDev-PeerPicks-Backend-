@@ -25,50 +25,53 @@ const UserController = {
     }
   },
 
- login: async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await Users.findOne({ where: { email } });
-    if (!user) {
-      return res.status(400).json({ error: "Invalid credentials." });
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(400).json({ error: "Invalid credentials." });
-    }
-
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-    // ✅ Ensure user.id is sent properly
-    res.json({ 
-      token, 
-      user_id: user.user_id, 
-      username: user.username, 
-      email: user.email 
-    });
-  } catch (error) {
-    console.error("Login Error:", error);
-    res.status(500).json({ error: "Login failed." });
-  }
-},  
-
-  getProfile: async (req, res) => {
-    const userId = req.user.id; // Extracted from auth middleware
+  login: async (req, res) => {
+    const { email, password } = req.body;
 
     try {
-      const user = await Users.findByPk(userId, { attributes: ["id", "username", "email"] });
+      const user = await Users.findOne({ where: { email } });
       if (!user) {
-        return res.status(404).json({ error: "User not found." });
+        return res.status(400).json({ error: "Invalid credentials." });
       }
 
-      res.json(user);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(400).json({ error: "Invalid credentials." });
+      }
+
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+      res.json({
+        token,
+        user_id: user.user_id,
+        username: user.username,
+        email: user.email,
+      });
     } catch (error) {
-      console.error("Profile Fetch Error:", error);
-      res.status(500).json({ error: "Failed to fetch user profile." });
+      console.error("Login Error:", error);
+      res.status(500).json({ error: "Login failed." });
     }
   },
-};
+
+  // Modified to accept `id` from the route parameters
+ 
+  getProfile: async (req, res) => {
+    const userId = req.params.user_id;  // Extract 'user_id' from route parameters (not 'id')
+    try {
+      // Fetch user by their ID using the User model
+      const userProfile = await Users.findOne({ where: { user_id: userId } });
+  
+      if (!userProfile) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      res.status(200).json(userProfile);  // Send back the profile data
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  
+}
 
 module.exports = UserController;
